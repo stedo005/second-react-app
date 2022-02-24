@@ -25,11 +25,6 @@ export default function Galerie() {
             .then((responseBody: jsonObject) => {setData(responseBody.results)})
     }, []);
 
-
-/*    const characters = data.results
-        .filter(e => e.name.toLowerCase().includes(itemName.toLowerCase()))
-        .map(e => < GalerieItem name={e.name} species={e.species} status={e.status} image={e.image}/>)*/
-
     return (
         <div>
             <div>
