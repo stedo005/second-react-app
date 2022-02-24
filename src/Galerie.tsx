@@ -2,7 +2,7 @@ import GalerieItem from "./GalerieItem";
 import {useEffect, useState} from "react";
 
 interface jsonObject {
-    info: object,
+    info: object
     results: Array<characterObject>
 }
 
@@ -16,10 +16,11 @@ interface characterObject {
 export default function Galerie() {
 
     const [itemName, setItemName] = useState('');
-
     const [data, setData] = useState([] as Array<characterObject>);
+    const [page, setPage] = useState(1);
 
-    const [page, setPage] = useState(1)
+    const [pageMax, setPageMax] = useState(42)
+
 
     useEffect(() => {
         fetch(`https://rickandmortyapi.com/api/character?page=${page}`)
@@ -30,9 +31,10 @@ export default function Galerie() {
     return (
         <div>
             <div>
-                <button onClick={() => {setPage(page - 1)}} hidden={page <= 1}>prev</button>
+                <button onClick={() => {setPage(page - 1)}} disabled={page <= 1}>prev</button>
                 <input type="text" placeholder="Name to search" value={itemName} onChange={ev => setItemName(ev.target.value)}/>
-                <button onClick={() => setPage(page + 1)}>next</button>
+                <button onClick={() => setPage(page + 1)} disabled={page >= pageMax}>next</button>
+                <div>{page} - {pageMax}</div>
             </div>
             <div>
                 {
