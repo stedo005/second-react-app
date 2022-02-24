@@ -19,16 +19,20 @@ export default function Galerie() {
 
     const [data, setData] = useState([] as Array<characterObject>);
 
+    const [page, setPage] = useState(1)
+
     useEffect(() => {
-        fetch("https://rickandmortyapi.com/api/character")
+        fetch(`https://rickandmortyapi.com/api/character?page=${page}`)
             .then(response => {return response.json()})
             .then((responseBody: jsonObject) => {setData(responseBody.results)})
-    }, []);
+    }, [page]);
 
     return (
         <div>
             <div>
-                < input type="text" placeholder="Name to search" value={itemName} onChange={ev => setItemName(ev.target.value)}/>
+                <button onClick={() => {setPage(page - 1)}} hidden={page <= 1}>prev</button>
+                <input type="text" placeholder="Name to search" value={itemName} onChange={ev => setItemName(ev.target.value)}/>
+                <button onClick={() => setPage(page + 1)}>next</button>
             </div>
             <div>
                 {
