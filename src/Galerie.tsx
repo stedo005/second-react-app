@@ -41,7 +41,7 @@ export default function Galerie() {
                     data.length > 0
                     ? data
                         .filter(e => e.name.toLowerCase().includes(itemName.toLowerCase()))
-                        .map(e => < GalerieItem name={e.name} species={e.species} status={e.status} image={e.image}/>)
+                        .map(e => <GalerieItem name={e.name} species={e.species} status={e.status} image={e.image}/>)
                     : <div>Lädt noch</div>
                 }
             </div>
