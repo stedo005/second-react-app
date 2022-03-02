@@ -2,12 +2,12 @@ import GalerieItem from "./GalerieItem";
 import {useEffect, useState} from "react";
 
 interface jsonObject {
-    info: object
+    info: infoObj
     results: Array<characterObject>
 }
 
 interface infoObj{
-    pages: string
+    pages: number
 }
 
 interface characterObject {
@@ -25,9 +25,9 @@ export default function Galerie() {
     const [page, setPage] = useState(1);
     const [errMsg, setErrMsg] = useState('');
 
-    const [infoOb, setInfoOb] = useState({})
+    const [infoOb, setInfoOb] = useState({} as infoObj)
 
-    const [pageMax, setPageMax] = useState(42)
+    const [pageMax, setPageMax] = useState(1)
 
     useEffect(() => {
         fetch(`https://rickandmortyapi.com/api/character?page=${page}`)
@@ -37,7 +37,7 @@ export default function Galerie() {
                 }
                 throw new Error('URL nicht gefunden!')
                 })
-            .then((responseBody: jsonObject) => {setData(responseBody.results)})
+            .then((responseBody: jsonObject) => {setData(responseBody.results); setInfoOb(responseBody.info); setPageMax(infoOb.pages)})
             .catch((err: Error) => setErrMsg(err.message))
     }, [page]);
 
