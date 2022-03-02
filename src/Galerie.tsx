@@ -6,6 +6,10 @@ interface jsonObject {
     results: Array<characterObject>
 }
 
+interface infoObj{
+    pages: string
+}
+
 interface characterObject {
     id: string
     name: string
@@ -20,6 +24,8 @@ export default function Galerie() {
     const [data, setData] = useState([] as Array<characterObject>);
     const [page, setPage] = useState(1);
     const [errMsg, setErrMsg] = useState('');
+
+    const [infoOb, setInfoOb] = useState({})
 
     const [pageMax, setPageMax] = useState(42)
 
