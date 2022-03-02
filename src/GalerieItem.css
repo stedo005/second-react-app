@@ -44,7 +44,3 @@
     border-radius: 10%;
     width: 130px;
 }
-
-.item-card:hover {
-    cursor: pointer;
-}
