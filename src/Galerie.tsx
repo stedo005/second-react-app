@@ -7,6 +7,7 @@ interface jsonObject {
 }
 
 interface characterObject {
+    id: string
     name: string
     species: string
     status: string
@@ -47,7 +48,7 @@ export default function Galerie() {
                     data.length > 0
                     ? data
                         .filter(e => e.name.toLowerCase().includes(itemName.toLowerCase()))
-                            .map(e => <div data-testid='galerie-item'>< GalerieItem name={e.name} species={e.species} status={e.status} image={e.image}/></div>)
+                            .map(e => <div key={e.id} data-testid='galerie-item'>< GalerieItem key={e.id} name={e.name} species={e.species} status={e.status} image={e.image} id={e.id}/></div>)
                     : <div>{errMsg}</div>
                 }
             </div>

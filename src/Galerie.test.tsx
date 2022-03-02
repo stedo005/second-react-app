@@ -1,5 +1,6 @@
 import {render, waitFor, screen, fireEvent} from "@testing-library/react";
 import Galerie from "./Galerie";
+import {MemoryRouter} from "react-router-dom";
 
 test('check response handling', async () => {
 
@@ -26,7 +27,7 @@ test('check response handling', async () => {
         } as Response)
     })
 
-    render(<Galerie/>);
+    render(<Galerie/>, {wrapper: MemoryRouter});
 
     await waitFor(() => {
         expect(screen.getAllByTestId('galerie-item').length).toEqual(2)

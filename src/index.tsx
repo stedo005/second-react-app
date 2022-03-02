@@ -3,10 +3,20 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import {BrowserRouter, Routes, Route} from "react-router-dom";
+import Galerie from "./Galerie";
+import Detail from "./Detail";
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+      <BrowserRouter>
+          <Routes>
+              <Route path='/' element={<App />}>
+                <Route path='galerie' element={<Galerie />} />
+                <Route path='galerie/:characterId' element={<Detail />}/>
+              </Route>
+          </Routes>
+      </BrowserRouter>
   </React.StrictMode>,
   document.getElementById('root')
 );

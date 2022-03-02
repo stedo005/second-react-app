@@ -1,16 +1,14 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
-import Galerie from "./Galerie";
+import {Link, Outlet} from "react-router-dom";
 
 function App() {
 
     return (
-
         <div>
-            < Galerie />
+            <div><Link to={"galerie"}>Zur Galerie</Link></div>
+            <div><Outlet /></div>
         </div>
-
     );
 }
 

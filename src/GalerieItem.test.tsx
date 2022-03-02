@@ -1,5 +1,6 @@
 import {render, screen} from '@testing-library/react';
 import GalerieItem from "./GalerieItem";
+import {MemoryRouter} from "react-router-dom";
 
 
 test('check for correct rendering the component', () => {
@@ -9,7 +10,7 @@ test('check for correct rendering the component', () => {
     const status = 'alive';
     const image = 'http://testurl/';
 
-    render(<GalerieItem name={name} species={species} status={status} image={image}/>);
+    render(<GalerieItem name={name} species={species} status={status} image={image}/>, {wrapper: MemoryRouter});
 
     expect(screen.getByTestId('name').textContent).toEqual('Steve');
     expect(screen.getByTestId('species').textContent).toEqual('Human');
