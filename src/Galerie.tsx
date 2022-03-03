@@ -2,11 +2,11 @@ import GalerieItem from "./GalerieItem";
 import {useEffect, useState} from "react";
 
 interface jsonObject {
-    info: infoObj
+    info: infoObject
     results: Array<characterObject>
 }
 
-interface infoObj{
+interface infoObject{
     pages: number
 }
 
@@ -21,13 +21,17 @@ interface characterObject {
 export default function Galerie() {
 
     const [itemName, setItemName] = useState('');
-    const [data, setData] = useState([] as Array<characterObject>);
+    const [info, setInfo] = useState({} as infoObject)
+    const [results, setResults] = useState([] as Array<characterObject>);
     const [page, setPage] = useState(1);
     const [errMsg, setErrMsg] = useState('');
+    const pageMax = info.pages;
 
-    const [infoOb, setInfoOb] = useState({} as infoObj)
-
-    const [pageMax, setPageMax] = useState(1)
+    useEffect(() => {
+        fetch('http://rickandmortyapi.com/api/character')
+            .then(resp => {return resp.json()})
+            .then((respBody: jsonObject) => {setInfo(respBody.info)})
+    }, []);
 
     useEffect(() => {
         fetch(`https://rickandmortyapi.com/api/character?page=${page}`)
@@ -37,7 +41,7 @@ export default function Galerie() {
                 }
                 throw new Error('URL nicht gefunden!')
                 })
-            .then((responseBody: jsonObject) => {setData(responseBody.results); setInfoOb(responseBody.info); setPageMax(infoOb.pages)})
+            .then((responseBody: jsonObject) => {setResults(responseBody.results)})
             .catch((err: Error) => setErrMsg(err.message))
     }, [page]);
 
@@ -51,8 +55,8 @@ export default function Galerie() {
             </div>
             <div>
                 {
-                    data.length > 0
-                    ? data
+                    results.length > 0
+                    ? results
                         .filter(e => e.name.toLowerCase().includes(itemName.toLowerCase()))
                             .map(e => <div key={e.id} data-testid='galerie-item'>< GalerieItem key={e.id} name={e.name} species={e.species} status={e.status} image={e.image} id={e.id}/></div>)
                     : <div>{errMsg}</div>
