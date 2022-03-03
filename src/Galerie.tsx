@@ -2,8 +2,12 @@ import GalerieItem from "./GalerieItem";
 import {useEffect, useState} from "react";
 
 interface jsonObject {
-    info: object
+    info: infoObject
     results: Array<characterObject>
+}
+
+interface infoObject{
+    pages: number
 }
 
 interface characterObject {
@@ -17,13 +21,20 @@ interface characterObject {
 export default function Galerie() {
 
     const [itemName, setItemName] = useState('');
-    const [data, setData] = useState([] as Array<characterObject>);
-    const [page, setPage] = useState(1);
+    const [info, setInfo] = useState({} as infoObject)
+    const [results, setResults] = useState([] as Array<characterObject>);
     const [errMsg, setErrMsg] = useState('');
-
-    const [pageMax, setPageMax] = useState(42)
+    const [page, setPage] = useState(localStorage.getItem('currentPage') ?? '1');
+    const pageMax = info.pages;
 
     useEffect(() => {
+        fetch(`http://rickandmortyapi.com/api/character?page=${page}`)
+            .then(resp => {return resp.json()})
+            .then((respBody: jsonObject) => {setInfo(respBody.info)})
+    }, []);
+
+    useEffect(() => {
+        localStorage.setItem('currentPage', page )
         fetch(`https://rickandmortyapi.com/api/character?page=${page}`)
             .then(response => {
                 if (response.ok) {
@@ -31,22 +42,30 @@ export default function Galerie() {
                 }
                 throw new Error('URL nicht gefunden!')
                 })
-            .then((responseBody: jsonObject) => {setData(responseBody.results)})
+            .then((responseBody: jsonObject) => {setResults(responseBody.results)})
             .catch((err: Error) => setErrMsg(err.message))
     }, [page]);
+
+    const prev = () => {
+        setPage(oldPage => `${parseInt(oldPage) - 1}`)
+    }
+
+    const next = () => {
+        setPage(oldPage => `${parseInt(oldPage) + 1}`)
+    }
 
     return (
         <div>
             <div>
-                <button onClick={() => {setPage(page - 1)}} disabled={page <= 1}>prev</button>
+                <button onClick={prev} disabled={parseInt(page) <= 1}>zurück</button>
                 <input data-testid='search-field' type="text" placeholder="Name to search" value={itemName} onChange={ev => setItemName(ev.target.value)}/>
-                <button onClick={() => setPage(page + 1)} disabled={page >= pageMax}>next</button>
+                <button onClick={next} disabled={parseInt(page) >= pageMax}>vor</button>
                 <div>{page} - {pageMax}</div>
             </div>
             <div>
                 {
-                    data.length > 0
-                    ? data
+                    results.length > 0
+                    ? results
                         .filter(e => e.name.toLowerCase().includes(itemName.toLowerCase()))
                             .map(e => <div key={e.id} data-testid='galerie-item'>< GalerieItem key={e.id} name={e.name} species={e.species} status={e.status} image={e.image} id={e.id}/></div>)
                     : <div>{errMsg}</div>
